@@ -1,0 +1,45 @@
+h1 {
+    font-family: "Inter", sans-serif;
+}
+
+.register-form {
+    background-color: var(--light-red);
+    width: 400px;
+    border-radius: 10px;
+    margin: 5vh 0;
+}
+
+.input-wrapper:nth-child(1)::before {
+  content: "imię";
+}
+
+.input-wrapper:nth-child(2)::before {
+  content: "nazwisko";
+}
+
+.input-wrapper:nth-child(3)::before {
+  content: "nazwa użytkownika";
+}
+
+.input-wrapper:nth-child(4)::before {
+  content: "email";
+}
+
+.input-wrapper:nth-child(5)::before {
+  content: "hasło";
+}
+
+.input-wrapper:nth-child(6)::before {
+  content: "powtórz hasło";
+}
+
+label a {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+@media only screen and (max-width: 600px) {
+    .register-form {
+        width: 100%;
+}
+}
