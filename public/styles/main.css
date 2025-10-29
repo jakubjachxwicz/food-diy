@@ -36,3 +36,21 @@ footer {
 footer span {
     padding: 20px;
 }
+
+footer div {
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+}
+
+footer a {
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+    footer div {
+        flex-direction: column;
+        padding: 0 10px;
+        gap: 8px;
+    }
+}
