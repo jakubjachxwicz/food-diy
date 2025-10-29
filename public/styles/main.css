@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 :root {
     --light-bg-color: #FFF2F2;
     --dark-bg-color: #252422;
@@ -5,4 +7,50 @@
     --light-red: #FF4343;
     --dark-red: #832626;
     --gray-border: #CAC4D0;
+    --dark-gray-border: #49454F;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: var(--light-bg-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+footer {
+    height: 100px;
+    margin-top: auto;
+    background-color: var(--dark-red);
+    width: 100%;
+    color: var(--light-bg-color);
+    font-family: "Inter", sans-serif;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+footer span {
+    padding: 20px;
+}
+
+footer div {
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+}
+
+footer a {
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+    footer div {
+        flex-direction: column;
+        padding: 0 10px;
+        gap: 8px;
+    }
 }
