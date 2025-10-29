@@ -24,5 +24,15 @@ footer {
     height: 100px;
     margin-top: auto;
     background-color: var(--dark-red);
-    width: 100vw;
+    width: 100%;
+    color: var(--light-bg-color);
+    font-family: "Inter", sans-serif;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+footer span {
+    padding: 20px;
 }
