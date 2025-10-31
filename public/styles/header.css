@@ -1,0 +1,84 @@
+header {
+    background-color: var(--light-red);
+    height: 80px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header > div {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 20px;
+}
+
+button {
+    background-color: var(--dark-red);
+    color: var(--on-surface);
+    border: none;
+    outline: none;
+    padding: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.header-icon-button {
+    padding: 14px;
+}
+
+.burger-menu-button {
+    display: none;
+}
+
+.nav-toggled-menu {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background-color: var(--light-red);
+    width: 100%;
+    padding: 10px 0;
+}
+
+.nav-toggled-menu > div {
+    padding: 20px;
+    font-family: "Roboto", sans-serif;
+    color: var(--on-surface);
+    cursor: pointer;
+}
+
+.selected-nav-item {
+    background-color: var(--dark-red);
+    color: var(--on-surface);
+    font-weight: bold;
+}
+
+.selected-header-item {
+    background-color: var(--on-surface);
+    color: var(--dark-bg-color);
+    font-weight: bold;
+}
+
+.nav-toggled-menu.toggled {
+    display: flex;
+}
+
+.burger-menu-button.toggled {
+    background-color: var(--on-surface);
+}
+
+.burger-menu-button.toggled > svg {
+    fill: var(--dark-bg-color);
+}
+
+
+@media only screen and (max-width: 720px) {
+.burger-menu-button {
+    display: block;
+}
+
+.header-text-button {
+    display: none;
+}
+}
