@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Przepis</title>
+    <link rel="stylesheet" type="text/css" href="public/styles/main.css">
+    <link rel="stylesheet" type="text/css" href="public/styles/header.css">
+    <link rel="stylesheet" type="text/css" href="public/styles/recipe.css">
+    <script src="public/scripts/header.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="left-header-side">
+            <button class="header-icon-button burger-menu-button">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+            </button>
+            <button class="header-text-button">Najpopularniejsze</button>
+            <button class="header-text-button selected-header-item">Kategorie</button>
+            <button class="header-text-button">Tagi</button>
+            <button class="header-text-button">Wyszukaj</button>
+        </div>
+
+        <div class="right-header-side">
+            <button class="header-icon-button">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
+            </button>
+            <button class="header-icon-button">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q53 0 100-15.5t86-44.5q-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160Zm0-360q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm0-60Zm0 360Z"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <div class="nav-toggled-menu">
+        <div class="nav-menu-item">Najpopularniejsze</div>
+        <div class="nav-menu-item selected-nav-item">Kategorie</div>
+        <div class="nav-menu-item">Tagi</div>
+        <div class="nav-menu-item">Wyszukaj</div>
+    </div>
+
+    <div class="main-recipe-card">
+        <img src="public/static/cynamonki.jpeg" alt="Zdjęcie przepisu">
+
+        <div class="divider"></div>
+
+        <div class="recipe-info">
+            <h3>Cynamonki</h3>
+            <h4>Pyszne bułeczki drożdżowe (drożdżówki) z cynamonem</h4>
+            
+            <div class="recipe-info-section">
+                <span>deser</span>
+                <span>tagi: jesień, lukier</span>
+            </div>
+            <div class="recipe-info-section">
+                <span>Autor: <a>maticracow</a></span>
+                <span>Data dodania: 12.04.2023</span>
+            </div>
+            <div class="recipe-info-section">
+                <span>Porcje: 12</span>
+                <span>Poziom trudności 6/10</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="recipe-stats">
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
+            <span>127</span>
+        </div>
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m384-334 96-74 96 74-36-122 90-64H518l-38-124-38 124H330l90 64-36 122ZM233-120l93-304L80-600h304l96-320 96 320h304L634-424l93 304-247-188-247 188Zm247-369Z"/></svg>
+            <span>4/5</span>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button>Oceń przepis</button>
+        <button>Dodaj do ulubionych</button>
+    </div>
+
+    <div class="content-section">
+        <div class="content-group">
+            <h3>Składniki</h3>
+            <div class="ingredients-list">
+                <div class="ingredient-row">
+                    <span>mąka pszenna 300g</span>
+                    <div></div>
+                </div>
+                <div class="ingredient-row">
+                    <span>woda 200 ml</span>
+                    <div></div>
+                </div>
+                <div class="ingredient-row">
+                    <span>2 kostki masła</span>
+                    <div></div>
+                </div>
+                <div class="ingredient-row">
+                    <span>200g gorzkiej czekolady</span>
+                    <div></div>
+                </div>
+                <div class="ingredient-row">
+                    <span>sól i pieprz</span>
+                    <div></div>
+                </div>
+                <div class="ingredient-row">
+                    <span>2 kostki masła</span>
+                    <div></div>
+                </div>
+                <div class="ingredient-row">
+                    <span>200g gorzkiej czekolady</span>
+                    <div></div>
+                </div>
+                <div class="ingredient-row">
+                    <span>sól i pieprz</span>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-group">
+            <h3>Przygotowanie</h3>
+            <div>
+                <div>
+                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                </div>
+                <div>
+                    <h4>Wskazówki</h4>
+                    <div>
+                        The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div><a>Kontakt</a><a>Regulamin</a><a>Polityka prywatności</a></div>
+        <span>@ 2025</span>
+    </footer>
+</body>
+</html>
