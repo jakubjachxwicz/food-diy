@@ -20,6 +20,10 @@ class Routing
         'recipe' => [
             'controller' => 'SecurityController',
             'action' => 'recipe'
+        ],
+        'add-recipe' => [
+            'controller' => 'SecurityController',
+            'action' => 'addRecipe'
         ]
     ];
     
@@ -31,6 +35,7 @@ class Routing
             case 'register':
             case 'recipes':
             case 'recipe':
+            case 'add-recipe':
                 $controller = self::$routes[$path]['controller'];
                 $action = self::$routes[$path]['action'];
 

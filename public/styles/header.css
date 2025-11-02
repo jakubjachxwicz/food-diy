@@ -60,6 +60,10 @@ button {
     font-weight: bold;
 }
 
+.selected-header-item > svg {
+    fill: var(--dark-bg-color);
+}
+
 .nav-toggled-menu.toggled {
     display: flex;
 }
