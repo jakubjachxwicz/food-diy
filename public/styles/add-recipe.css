@@ -1,0 +1,127 @@
+form {
+    width: 60%;
+}
+
+.divider {
+    width: 80%;
+    background-color: var(--dark-gray-border);
+    height: 1px;
+    margin: 24px 0;
+}
+
+.form-elements {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 8px;
+    font-family: "Roboto", sans-serif;
+}
+
+textarea {
+    font-family: "Roboto", sans-serif;
+    width: 100%;
+    resize: none;
+}
+
+textarea.description {
+    height: 80px;
+}
+
+textarea.instructions {
+    height: 100px;
+}
+
+textarea.tips {
+    height: 60px;
+}
+
+.input-wrapper {
+  width: 90%;
+  margin: 16px 0;
+  box-sizing: border-box;
+  border: var(--dark-red) 1px solid;
+  padding: 16px;
+  border-radius: 4px;
+  position: relative;
+  display: inline-block;
+}
+
+.input-wrapper::before {
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  background-color: var(--light-bg-color);
+  color: var(--dark-gray-border);
+  padding: 0 4px;
+  font-size: small;
+}
+
+.form-input {
+    border: none;
+    background: none;
+    width: 100%;
+}
+
+.form-input:focus {
+    outline: none;
+    border: none;
+}
+
+.input-wrapper:nth-child(1)::before {
+  content: "Nazwa przepisu";
+}
+
+.input-wrapper:nth-child(2)::before {
+  content: "Opis";
+}
+
+.input-wrapper:nth-child(3)::before {
+  content: "Przygotowanie";
+}
+
+.input-wrapper:nth-child(4)::before {
+  content: "Wskazówki";
+}
+
+.selected-ingredients {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 70%;
+}
+
+.selected-ingredients > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.selected-ingredients > div::after {
+    content: "";
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: var(--dark-gray-border);
+}
+
+.selected-ingredients  svg {
+    fill: var(--dark-bg-color);
+    cursor: pointer;
+}
+
+
+@media only screen and (max-width: 660px) {
+form {
+    width: 90%;
+}
+}
+
+@media only screen and (max-width: 500px) {
+form {
+    width: 95%;
+}
+}
