@@ -87,7 +87,7 @@ textarea.tips {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    width: 70%;
+    width: 50%;
 }
 
 .selected-ingredients > div {
@@ -113,15 +113,95 @@ textarea.tips {
     cursor: pointer;
 }
 
-
-@media only screen and (max-width: 660px) {
-form {
-    width: 90%;
+.add-ingredient-section {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin: 16px;
 }
+
+.ingredient-input {
+    padding: 18px 16px;
+}
+
+.add-button {
+    width: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-button svg {
+    fill: var(--dark-bg-color);
+    cursor: pointer;
+}
+
+.ingredient-input::before {
+    content: "Dodaj składnik" !important;
+}
+
+.add-button::before {
+    content: "" !important;
+}
+
+@media only screen and (max-width: 720px) {
+    form {
+        width: 90%;
+    }
+
+    .add-ingredient-section {
+        width: 80%;
+    }
+
+    .selected-ingredients {
+        width: 80%;
+    }
+}
+
+.categories-and-tags {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 300px;
+    border: solid 2px var(--dark-red);
+    border-radius: 24px;
+    padding: 10px;
+    cursor: pointer;
+    margin: 12px;
+}
+
+.categories-and-tags svg {
+    fill: var(--dark-bg-color);
+}
+
+.add-recipe-button {
+    background-color: var(--light-red);
+    color: var(--light-bg-color);
+    font-family: "Inter", sans-serif;
+    width: 300px;
+    border: none;
+    outline: none;
+    margin: 5px 0 30px 0;
+    padding: 10px;
+    font-size: medium;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 500px) {
-form {
-    width: 95%;
-}
+    form {
+        width: 95%;
+    }
+
+    .add-ingredient-section {
+        width: 95%;
+    }
+
+    .selected-ingredients {
+        width: 95%;
+    }
 }
