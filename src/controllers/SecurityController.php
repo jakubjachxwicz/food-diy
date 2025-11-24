@@ -33,4 +33,10 @@ class SecurityController extends AppController
     {
         return $this->render('add-recipe');
     }
+
+    // probably temporary solution for displaying recipe view
+    public function account()
+    {
+        return $this->render('account');
+    }
 }
