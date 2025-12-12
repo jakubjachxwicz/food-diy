@@ -47,6 +47,14 @@
     border: none;
 }
 
+.error-output {
+    color: var(--error-red);
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+    padding: 0 4px;
+}
+
 .form-elements button {
     background-color: var(--light-red);
     color: var(--light-bg-color);
