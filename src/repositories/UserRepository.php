@@ -1,41 +1,51 @@
 <?php
 
-class UserRepository 
+require_once 'Repository.php';
+
+class UserRepository extends Repository
 {
     private $users = [];
     
-    public function __construct()
-    {
-        $this->users = [
-            [
-                'id' => 1,
-                'firstName' => 'John',
-                'lastName' => 'Doe',
-                'username' => 'johndoe',
-                'email' => 'john@doe.com',
-                'passwordHash' => '$2y$12$examplehashstringforpassword1234567890'
-            ]
-        ];
-    }
+    // public function __construct()
+    // {
+    //     $this->users = [
+    //         [
+    //             'id' => 1,
+    //             'firstName' => 'John',
+    //             'lastName' => 'Doe',
+    //             'username' => 'johndoe',
+    //             'email' => 'john@doe.com',
+    //             'passwordHash' => '$2y$12$examplehashstringforpassword1234567890'
+    //         ]
+    //     ];
+    // }
 
     public function createUser(array $user): ?int 
     {
-        $newId = count($this->users) + 1;
+        $query = $this->database->connect()->prepare(
+            'INSERT INTO uzytkownicy (nazwa, imie, nazwisko, email, haslo) 
+            VALUES (:nazwa, :imie, :nazwisko, :email, :password)
+            RETURNING uzytkownik_id'
+        );
+
+        $query->bindParam(':nazwa', $user['username']);
+        $query->bindParam(':imie', $user['firstName']);
+        $query->bindParam(':nazwisko', $user['lastName']);
+        $query->bindParam(':email', $user['email']);
+        $query->bindParam(':password', $user['passwordHash']);
+
+        $query->execute();
         
-        $user['id'] = $newId;
-        
-        $this->users[] = $user;
-        
-        return $newId;
+        return $query->fetchColumn();
     }
     
-    public function findByEmail(string $email): ?array
+    public function findByEmail(string $email)
     {
-        foreach ($this->users as $user) {
-            if ($user['email'] === $email) {
-                return $user;
-            }
-        }       
+        // foreach ($this->users as $user) {
+        //     if ($user['email'] === $email) {
+        //         return $user;
+        //     }
+        // }       
         return null;
     }
     

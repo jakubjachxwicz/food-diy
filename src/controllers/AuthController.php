@@ -15,18 +15,18 @@ class AuthController
         throw new \Exception("Cannot unserialize singleton");
     }
 
-    public static function getInstance(): self
+    public static function getInstance(UserRepository $repository): self
     {
         if (self::$instance === null) {
-            self::$instance = new self();
+            self::$instance = new self($repository);
         }
 
         return self::$instance;
     }
 
-    public function __construct() 
+    private function __construct(UserRepository $repository) 
     {
-        $this->userRepository = new UserRepository();
+        $this->userRepository = $repository;
 
         header('Content-Type: application/json');
     }
@@ -67,7 +67,7 @@ class AuthController
                 'email' => $input['email'],
                 'passwordHash' => $passwordHash
             ]);
-            
+
             if ($userId) 
             {
                 $_SESSION['user_id'] = $userId;

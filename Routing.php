@@ -1,8 +1,9 @@
 <?php
 
-// require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/AppController.php';
 require_once 'src/controllers/AuthController.php';
+require_once 'src/repositories/UserRepository.php';
+require_once 'Database.php';
 
 class Routing 
 {
@@ -95,10 +96,22 @@ class Routing
             }
         }
 
-        $controller = $route['controller'];
+        $controllerClass = $route['controller'];
         $action = $route['action'];
 
-        $controllerObj = $controller::getInstance();
-        $controllerObj->$action();
+        $database = new Database();
+
+        switch ($controllerClass)
+        {
+            case AppController::class:
+                $controller = AppController::getInstance();
+                break;
+            case AuthController::class:
+                $repository = new UserRepository($database);
+                $controller = AuthController::getInstance($repository);
+                break;
+        }
+
+        $controller->$action();
     }
 }
