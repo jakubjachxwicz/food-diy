@@ -5,11 +5,28 @@ require_once 'src/repositories/UserRepository.php';
 
 class AuthController 
 {
+    private static $instance = null;
+    
     private UserRepository $userRepository;
 
-    public function __construct() 
+    private function __clone() {}
+    public function __wakeup()
     {
-        $this->userRepository = new UserRepository();
+        throw new \Exception("Cannot unserialize singleton");
+    }
+
+    public static function getInstance(UserRepository $repository): self
+    {
+        if (self::$instance === null) {
+            self::$instance = new self($repository);
+        }
+
+        return self::$instance;
+    }
+
+    private function __construct(UserRepository $repository) 
+    {
+        $this->userRepository = $repository;
 
         header('Content-Type: application/json');
     }
@@ -48,9 +65,9 @@ class AuthController
                 'lastName' => $input['lastName'],
                 'username' => $input['username'],
                 'email' => $input['email'],
-                'passwordHash' => $passwordHash
+                'password' => $passwordHash
             ]);
-            
+
             if ($userId) 
             {
                 $_SESSION['user_id'] = $userId;
@@ -99,7 +116,7 @@ class AuthController
             }
             
             $user = $this->userRepository->findByEmail($input['email']);
-            
+
             if (!$user) 
             {
                 http_response_code(401);
@@ -110,7 +127,7 @@ class AuthController
                 return;
             }
             
-            if (!password_verify($input['password'], $user['password_hash'])) 
+            if (!password_verify($input['password'], $user['password'])) 
             {
                 http_response_code(401);
                 echo json_encode([
@@ -120,11 +137,9 @@ class AuthController
                 return;
             }
             
-            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['email'] = $user['email'];
             regenerateSession();
-            
-            $this->userRepository->updateLastLogin($user['id']);
             
             echo json_encode([
                 'success' => true,

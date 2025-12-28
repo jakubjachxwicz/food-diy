@@ -1,8 +1,16 @@
 const registerForm = document.querySelector('#registerForm');
 const loginForm = document.querySelector('#loginForm');
+const createAccountButton = document.querySelector('#createAccountButton');
+
+createAccountButton?.addEventListener('click', () => {
+    window.location.replace('/register');
+});
 
 loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    const errorOutput = document.querySelector('#error-output');
+    errorOutput.textContent = "";
 
     const email = document.querySelector('#emailInput').value;
     const password = document.querySelector('#passwordInput').value;
@@ -21,6 +29,9 @@ loginForm?.addEventListener('submit', async (e) => {
         if (data.success) {
             window.location.href = '/recipes';
         } else {
+            // TODO display failure info on the page
+            // and check response as well
+            
             alert('Login failed: ' + data.message);
         }
     } catch (error) {
@@ -77,7 +88,7 @@ registerForm?.addEventListener('submit', async (e) => {
             },
             body: JSON.stringify({ firstName, lastName, username, email, password })  
         });
-        
+
         data = await response.json();
         if (data.success)
         {
