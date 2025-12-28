@@ -1,6 +1,6 @@
 <?php
 
-require_once 'src/controllers/SecurityController.php';
+// require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/AppController.php';
 require_once 'src/controllers/AuthController.php';
 
@@ -8,35 +8,35 @@ class Routing
 {
     public static $routes = [
         'login' => [
-            'controller' => 'SecurityController',
+            'controller' => 'AppController',
             'action' => 'login',
             'method' => 'GET'
         ],
         'register' => [
-            'controller' => 'SecurityController',
+            'controller' => 'AppController',
             'action' => 'register',
             'method' => 'GET'
         ],
         'recipes' => [
-            'controller' => 'SecurityController',
+            'controller' => 'AppController',
             'action' => 'recipes',
             'method' => 'GET',
             'protected' => true
         ],
         'recipe' => [
-            'controller' => 'SecurityController',
+            'controller' => 'AppController',
             'action' => 'recipe',
             'method' => 'GET',
             'protected' => true
         ],
         'add-recipe' => [
-            'controller' => 'SecurityController',
+            'controller' => 'AppController',
             'action' => 'addRecipe',
             'method' => 'GET',
             'protected' => true
         ],
         'account' => [
-            'controller' => 'SecurityController',
+            'controller' => 'AppController',
             'action' => 'account',
             'method' => 'GET',
             'protected' => true
@@ -98,7 +98,7 @@ class Routing
         $controller = $route['controller'];
         $action = $route['action'];
 
-        $controllerObj = new $controller();
+        $controllerObj = $controller::getInstance();
         $controllerObj->$action();
     }
 }

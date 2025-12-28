@@ -5,7 +5,24 @@ require_once 'src/repositories/UserRepository.php';
 
 class AuthController 
 {
+    private static $instance = null;
+    
     private UserRepository $userRepository;
+
+    private function __clone() {}
+    public function __wakeup()
+    {
+        throw new \Exception("Cannot unserialize singleton");
+    }
+
+    public static function getInstance(): self
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
 
     public function __construct() 
     {

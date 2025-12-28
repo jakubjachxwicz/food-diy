@@ -21,6 +21,8 @@ loginForm?.addEventListener('submit', async (e) => {
         if (data.success) {
             window.location.href = '/recipes';
         } else {
+            // TODO display failure info on the page
+            
             alert('Login failed: ' + data.message);
         }
     } catch (error) {
