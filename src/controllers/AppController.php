@@ -25,14 +25,18 @@ class AppController
 
     public function login()
     {
-        // TODO check if user is logged in redirect if yes
+        require_once 'config/session.php';
+        if (isAuthenticated())
+            header('Location: /recipes');
         
         return $this->render('login');
     }
 
     public function register()
     {
-        // TODO check if user is logged in redirect if yes
+        require_once 'config/session.php';
+        if (isAuthenticated())
+            header('Location: /recipes');
         
         return $this->render('register');
     }

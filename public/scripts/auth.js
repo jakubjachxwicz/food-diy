@@ -89,8 +89,6 @@ registerForm?.addEventListener('submit', async (e) => {
             body: JSON.stringify({ firstName, lastName, username, email, password })  
         });
 
-        console.log(response);
-        
         data = await response.json();
         if (data.success)
         {

@@ -4,35 +4,19 @@ require_once 'Repository.php';
 
 class UserRepository extends Repository
 {
-    private $users = [];
-    
-    // public function __construct()
-    // {
-    //     $this->users = [
-    //         [
-    //             'id' => 1,
-    //             'firstName' => 'John',
-    //             'lastName' => 'Doe',
-    //             'username' => 'johndoe',
-    //             'email' => 'john@doe.com',
-    //             'passwordHash' => '$2y$12$examplehashstringforpassword1234567890'
-    //         ]
-    //     ];
-    // }
-
     public function createUser(array $user): ?int 
     {
         $query = $this->database->connect()->prepare(
-            'INSERT INTO uzytkownicy (nazwa, imie, nazwisko, email, haslo) 
-            VALUES (:nazwa, :imie, :nazwisko, :email, :password)
-            RETURNING uzytkownik_id'
+            'INSERT INTO users (username, first_name, last_name, email, password) 
+            VALUES (:username, :firstName, :lastName, :email, :password)
+            RETURNING user_id'
         );
 
-        $query->bindParam(':nazwa', $user['username']);
-        $query->bindParam(':imie', $user['firstName']);
-        $query->bindParam(':nazwisko', $user['lastName']);
+        $query->bindParam(':username', $user['username']);
+        $query->bindParam(':firstName', $user['firstName']);
+        $query->bindParam(':lastName', $user['lastName']);
         $query->bindParam(':email', $user['email']);
-        $query->bindParam(':password', $user['passwordHash']);
+        $query->bindParam(':password', $user['password']);
 
         $query->execute();
         
@@ -41,12 +25,27 @@ class UserRepository extends Repository
     
     public function findByEmail(string $email)
     {
-        // foreach ($this->users as $user) {
-        //     if ($user['email'] === $email) {
-        //         return $user;
-        //     }
-        // }       
-        return null;
+        $query = $this->database->connect()->prepare('
+            SELECT * FROM users 
+            WHERE email = :email
+        ');
+
+        $query->bindParam(':email', $email);
+        $query->execute();
+
+        if ($query->rowCount() == 0)
+            return null;
+
+        $row = $query->fetch();
+        return [
+            'user_id' => $row['user_id'],
+            'username' => $row['username'],
+            'firstName' => $row['first_name'],
+            'lastName' => $row['last_name'],
+            'email' => $row['email'],
+            'password' => $row['password'],
+            'privilege_level' => $row['privilege_level']
+        ];
     }
     
     public function getById(int $id): ?array
