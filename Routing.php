@@ -8,6 +8,12 @@ require_once 'Database.php';
 class Routing 
 {
     public static $routes = [
+        '' => [
+            'controller' => 'AppController',
+            'action' => 'default',
+            'method' => 'GET',
+            'protected' => true
+        ],
         'login' => [
             'controller' => 'AppController',
             'action' => 'login',
