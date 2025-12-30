@@ -2,7 +2,11 @@
 
 require_once 'src/controllers/AppController.php';
 require_once 'src/controllers/AuthController.php';
+require_once 'src/controllers/RecipeController.php';
+
 require_once 'src/repositories/UserRepository.php';
+require_once 'src/repositories/RecipeRepository.php';
+
 require_once 'Database.php';
 
 class Routing 
@@ -69,6 +73,13 @@ class Routing
             'controller' => 'AuthController',
             'action' => 'checkAuth',
             'method' => 'GET'
+        ],
+
+        'api/recipes/popular' => [
+            'controller' => 'RecipeController',
+            'action' => 'getPopularRecipesWithCategoryAndTags',
+            'method' => 'GET',
+            'protected' => true
         ]
     ];
     
@@ -115,6 +126,10 @@ class Routing
             case AuthController::class:
                 $repository = new UserRepository($database);
                 $controller = AuthController::getInstance($repository);
+                break;
+            case RecipeController::class:
+                $repository = new RecipeRepository($database);
+                $controller = RecipeController::getInstance($repository);
                 break;
         }
 
