@@ -80,6 +80,18 @@ class Routing
             'action' => 'getPopularRecipesWithCategoryAndTags',
             'method' => 'GET',
             'protected' => true
+        ],
+        'api/recipes/categories' => [
+            'controller' => 'RecipeController',
+            'action' => 'getRecipesByCategory',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/categories' => [
+            'controller' => 'RecipeController',
+            'action' => 'getAvailableCategories',
+            'method' => 'GET',
+            'protected' => true
         ]
     ];
     

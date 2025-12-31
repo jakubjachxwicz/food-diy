@@ -1,4 +1,4 @@
-.category-filtering {
+.filtering-container {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -6,24 +6,25 @@
     color: var(--dark-bg-color);
 }
 
-.category-filtering > div {
+.filtering-container > div {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
     width: 200px;
+    position: relative;
 }
 
-.category-filtering svg {
+.filtering-container svg {
     fill: var(--dark-bg-color);
 }
 
-.category-filtering span {
+.filtering-container span {
     font-size: 16px;
     margin-left: 10px;
 }
 
-.category-filtering > * {
+.filtering-container > * {
     border: solid 2px var(--dark-red);
     border-radius: 24px;
     padding: 10px;
@@ -37,6 +38,29 @@
     gap: 16px;
     justify-content: space-between;
     margin: 16px 0;
+}
+
+.filtering-dropdown {
+    display: none;
+    left: 0;
+    top: 48px;
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 24px;
+    border: solid 2px var(--dark-red);
+    background-color: var(--light-bg-color);
+    flex-direction: column;
+    padding: 16px 0;
+}
+
+.filtering-dropdown > div {
+    padding: 12px 8px;
+}
+
+.filtering-dropdown > div:hover {
+    background-color: var(--on-surface);
 }
 
 .recipe-card {

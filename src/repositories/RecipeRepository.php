@@ -34,4 +34,33 @@ class RecipeRepository extends Repository
 
         return $query->fetchAll(PDO::FETCH_COLUMN);
     }
+
+    public function getRecipesByCategory($category)
+    {
+        $query = $this->database->connect()->prepare('
+            SELECT recipe_id, recipe_name, users.username AS author, views, 
+            fun_recipe_rating(recipe_id) AS rating, categories.category_name AS category
+            FROM recipes
+            JOIN users ON users.user_id = recipes.author_id
+            JOIN categories ON categories.category_id = recipes.category_id
+            WHERE active = true AND categories.category_name = :category
+            ORDER BY fun_recipe_rating(recipe_id) DESC
+            LIMIT 10
+        ');
+
+        $query->bindParam(':category', $category);
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllCategories()
+    {
+        $query = $this->database->connect()->query('
+            SELECT category_name FROM categories
+        ');
+        $rows = $query->fetchAll(PDO::FETCH_COLUMN);
+
+        return $rows;
+    }
 }

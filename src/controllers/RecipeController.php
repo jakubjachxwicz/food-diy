@@ -58,4 +58,63 @@ class RecipeController
             error_log($e->getMessage());
         }
     }
+
+    public function getRecipesByCategory()
+    {
+        try
+        {
+            if (!isset($_GET['category']))
+            {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Category not provided'
+                ]);
+                return;
+            }
+
+            $result = [];
+
+            $recipes = $this->recipeRepository->getRecipesByCategory($_GET['category']);
+            foreach ($recipes as $recipe)
+            {
+                $recipe['tags'] = $this->recipeRepository->getRecipeTags($recipe['recipe_id']);
+                $result[] = $recipe;
+            }
+
+            echo json_encode([
+                'success' => true,
+                'recipes' => $result
+            ]);
+        } catch (Exception $e) 
+        {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
+
+    public function getAvailableCategories()
+    {
+        try
+        {
+            $categories = $this->recipeRepository->getAllCategories();
+
+            echo json_encode([
+                'success' => true,
+                'categories' => $categories
+            ]);
+        } catch (Exception $e) 
+        {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
 }
