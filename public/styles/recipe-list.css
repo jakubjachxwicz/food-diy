@@ -31,6 +31,13 @@
     cursor: pointer;
 }
 
+.filtering-container input {
+    background: none;
+    width: 100%;
+    border: none;
+    outline: none;
+}
+
 .recipe-list {
     width: 50%;
     display: flex;
@@ -53,6 +60,8 @@
     background-color: var(--light-bg-color);
     flex-direction: column;
     padding: 16px 0;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .filtering-dropdown > div {

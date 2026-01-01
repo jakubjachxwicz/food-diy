@@ -92,6 +92,24 @@ class Routing
             'action' => 'getAvailableCategories',
             'method' => 'GET',
             'protected' => true
+        ],
+        'api/recipes/tags' => [
+            'controller' => 'RecipeController',
+            'action' => 'getRecipesByTag',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/tags' => [
+            'controller' => 'RecipeController',
+            'action' => 'getAvailableTags',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipes/search' => [
+            'controller' => 'RecipeController',
+            'action' => 'searchRecipes',
+            'method' => 'GET',
+            'protected' => true
         ]
     ];
     

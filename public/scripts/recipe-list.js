@@ -4,20 +4,21 @@ const listParam = params.get('list');
 const recipeList = document.querySelector('.recipe-list');
 
 document.addEventListener('DOMContentLoaded', async () => {
-    if (listParam == 'categories')
-    {
-        await renderCategoryFiltering();
-    }
-    renderRecipeList();
+    if (listParam === 'categories' || listParam === 'tags')
+        await renderFiltering(listParam);
+    else if (listParam === 'search')
+        renderSearchBar();
+
+    await renderRecipeList();
 });
 
 
 const filteringContainer = document.querySelector('.filtering-container');
 
-const renderCategoryFiltering = async () => {
-try
+const renderFiltering = async (filteringType) => {
+    try
     {
-        const response = await fetch('api/categories', {
+        const response = await fetch(filteringType === 'categories' ? 'api/categories' : 'api/tags', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -27,15 +28,15 @@ try
         const data = await response.json();
         if (data.success) 
         {
-            const categories = data.categories;
+            const options = filteringType === 'categories' ? data.categories : data.tags;
             
             const filteringOption = document.createElement('div');
             filteringOption.id = 'filteringOption';
 
             const selectedSpan = document.createElement('span');
             selectedSpan.id = 'selectedOption';
-            selectedSpan.textContent = categories[0];
-            selectedSpan.dataset.value = categories[0];
+            selectedSpan.textContent = options[0];
+            selectedSpan.dataset.value = options[0];
             filteringOption.appendChild(selectedSpan);
 
             // Arrow SVG
@@ -59,14 +60,14 @@ try
             const dropdown = document.createElement('div');
             dropdown.className = 'filtering-dropdown';
 
-            categories.forEach(category => {
+            options.forEach(option => {
                 const item = document.createElement('div');
-                item.dataset.value = category;
-                item.textContent = category;
+                item.dataset.value = option;
+                item.textContent = option;
 
                 item.addEventListener('click', () => {
-                    selectedSpan.textContent = category;
-                    selectedSpan.dataset.value = category;
+                    selectedSpan.textContent = option;
+                    selectedSpan.dataset.value = option;
                 });
 
                 dropdown.appendChild(item);
@@ -110,6 +111,39 @@ try
     }
 };
 
+const renderSearchBar = () => {
+    const wrapperDiv = document.createElement("div");
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.id = "searchTermInput";
+
+    wrapperDiv.appendChild(input);
+
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+
+    svg.setAttribute("xmlns", svgNS);
+    svg.setAttribute("height", "24px");
+    svg.setAttribute("width", "24px");
+    svg.setAttribute("viewBox", "0 -960 960 960");
+    svg.setAttribute("fill", "#e3e3e3");
+
+    const path = document.createElementNS(svgNS, "path");
+    path.setAttribute(
+    "d",
+    "M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"
+    );
+
+    svg.addEventListener('click', async () => await renderRecipeList());
+
+    svg.appendChild(path);
+
+    filteringContainer.appendChild(wrapperDiv);
+    filteringContainer.appendChild(svg);
+    // filteringContainer.style.cursor = none;
+};
+
 
 const renderRecipeList = async () => {
     try
@@ -125,6 +159,20 @@ const renderRecipeList = async () => {
 
                 url = '/api/recipes/categories?category=' + category;
                 break;
+            case 'tags':
+                const tagSelection = document.querySelector('#selectedOption');
+                const tag = tagSelection.dataset.value;
+
+                url = '/api/recipes/tags?tag=' + tag;
+                break;
+            case 'search':
+                const searchInput = document.querySelector('#searchTermInput');
+                const searchTerm = searchInput.value;
+                if (!searchTerm)
+                    return;
+
+                url = '/api/recipes/search?term=' + searchTerm;
+                break;
             default:
                 url = '/api/recipes/popular';
                 break;
@@ -136,6 +184,9 @@ const renderRecipeList = async () => {
                 'Content-Type': 'application/json'
             }
         });
+
+        console.log(response);
+        
 
         const data = await response.json();
         if (data.success) {

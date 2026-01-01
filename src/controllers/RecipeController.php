@@ -117,4 +117,101 @@ class RecipeController
             error_log($e->getMessage());
         }
     }
+
+    public function getRecipesByTag()
+    {
+        try
+        {
+            if (!isset($_GET['tag']))
+            {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Tag not provided'
+                ]);
+                return;
+            }
+
+            $result = [];
+
+            $recipes = $this->recipeRepository->getRecipesByTag($_GET['tag']);
+            foreach ($recipes as $recipe)
+            {
+                $recipe['tags'] = $this->recipeRepository->getRecipeTags($recipe['recipe_id']);
+                $result[] = $recipe;
+            }
+
+            echo json_encode([
+                'success' => true,
+                'recipes' => $result
+            ]);
+        } catch (Exception $e)
+        {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
+
+    public function getAvailableTags()
+    {
+        try
+        {
+            $tags = $this->recipeRepository->getAllTags();
+
+            echo json_encode([
+                'success' => true,
+                'tags' => $tags
+            ]);
+        } catch (Exception $e) 
+        {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
+
+    public function searchRecipes()
+    {
+        try
+        {
+            if (!isset($_GET['term']))
+            {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Search term not provided'
+                ]);
+                return;
+            }
+
+            $result = [];
+
+            $recipes = $this->recipeRepository->getRecipesBySearchTerm($_GET['term']);
+            foreach ($recipes as $recipe)
+            {
+                $recipe['tags'] = $this->recipeRepository->getRecipeTags($recipe['recipe_id']);
+                $result[] = $recipe;
+            }
+
+            echo json_encode([
+                'success' => true,
+                'recipes' => $result
+            ]);
+        } catch (Exception $e)
+        {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
 }
