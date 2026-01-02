@@ -8,6 +8,8 @@
     <link rel="stylesheet" type="text/css" href="public/styles/header.css">
     <link rel="stylesheet" type="text/css" href="public/styles/recipe.css">
     <script src="public/scripts/header.js" defer></script>
+    <script src="public/scripts/recipe.js" defer></script>
+    <script src="public/scripts/recipe-rates.js" defer></script>
 </head>
 <body>
     <header>
@@ -38,96 +40,68 @@
         <div id="searchNavButton" class="nav-menu-item">Wyszukaj</div>
     </div>
 
-    <div class="main-recipe-card">
+    <div class="main-recipe-card page-content">
         <img src="public/static/cynamonki.jpeg" alt="Zdjęcie przepisu">
 
         <div class="divider"></div>
 
         <div class="recipe-info">
-            <h3>Cynamonki</h3>
-            <h4>Pyszne bułeczki drożdżowe (drożdżówki) z cynamonem</h4>
+            <h3 id="recipeTitleField"></h3>
+            <h4 id="recipeDescriptionField"></h4>
             
             <div class="recipe-info-section">
-                <span>deser</span>
-                <span>tagi: jesień, lukier</span>
+                <span id="recipeCategoryField"></span>
+                <span id="recipeTagsField"></span>
             </div>
             <div class="recipe-info-section">
-                <span>Autor: <a>maticracow</a></span>
-                <span>Data dodania: 12.04.2023</span>
+                <span>Autor: <a id="recipeAuthorField"></a></span>
+                <span id="recipeDateAddedField"></span>
             </div>
             <div class="recipe-info-section">
-                <span>Porcje: 12</span>
-                <span>Poziom trudności 6/10</span>
+                <span id="recipePortionsField"></span>
+                <span id="recipeDifficultyField"></span>
             </div>
         </div>
     </div>
 
-    <div class="recipe-stats">
+    <div class="recipe-stats page-content">
         <div>
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
-            <span>127</span>
+            <span id="recipeViewsField"></span>
         </div>
         <div>
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m384-334 96-74 96 74-36-122 90-64H518l-38-124-38 124H330l90 64-36 122ZM233-120l93-304L80-600h304l96-320 96 320h304L634-424l93 304-247-188-247 188Zm247-369Z"/></svg>
-            <span>4/5</span>
+            <span id="recipeRatingField"></span>
         </div>
     </div>
 
-    <div class="buttons">
-        <button>Oceń przepis</button>
-        <button>Dodaj do ulubionych</button>
+    <div class="buttons page-content">
+        <button id="rateRecipeButton">Oceń przepis</button>
+        <button id="addToFavouriteButton">Dodaj do ulubionych</button>
+    </div>
+
+    <div class="rating-popup" style="display: none;">
+        <div>
+            <svg id="closePopupButton" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+        </div>
+        <input type="number" id="ratingInput" value="5" min="1" max="5">
+        <div id="popupErrorOutput"></div>
+        <button id="rateButton">Oceń</button>
     </div>
 
     <div class="content-section">
         <div class="content-group">
             <h3>Składniki</h3>
-            <div class="ingredients-list">
-                <div class="ingredient-row">
-                    <span>mąka pszenna 300g</span>
-                    <div></div>
-                </div>
-                <div class="ingredient-row">
-                    <span>woda 200 ml</span>
-                    <div></div>
-                </div>
-                <div class="ingredient-row">
-                    <span>2 kostki masła</span>
-                    <div></div>
-                </div>
-                <div class="ingredient-row">
-                    <span>200g gorzkiej czekolady</span>
-                    <div></div>
-                </div>
-                <div class="ingredient-row">
-                    <span>sól i pieprz</span>
-                    <div></div>
-                </div>
-                <div class="ingredient-row">
-                    <span>2 kostki masła</span>
-                    <div></div>
-                </div>
-                <div class="ingredient-row">
-                    <span>200g gorzkiej czekolady</span>
-                    <div></div>
-                </div>
-                <div class="ingredient-row">
-                    <span>sól i pieprz</span>
-                    <div></div>
-                </div>
-            </div>
+            <div class="ingredients-list"></div>
         </div>
         
         <div class="content-group">
             <h3>Przygotowanie</h3>
             <div>
+                <div id="recipeInstructionField"></div>
                 <div>
-                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                </div>
-                <div>
-                    <h4>Wskazówki</h4>
-                    <div>
-                        The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                    </div>
+                    <h4 id="recipeTipsLabel">Wskazówki</h4>
+                    <div id="recipeTipsField"></div>
                 </div>
             </div>
         </div>

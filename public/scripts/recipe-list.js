@@ -244,6 +244,8 @@ const renderRecipeList = async () => {
 
                 card.appendChild(footer);
 
+                card.addEventListener('click', () => location.replace(`/recipe?id=${recipe.recipe_id}`));
+
                 recipeList.appendChild(card);
             })
         } else {

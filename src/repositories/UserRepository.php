@@ -67,4 +67,17 @@ class UserRepository extends Repository
             }
         }       
     }
+
+    public function getUserRole(int $userId)
+    {
+        $query = $this->database->connect()->prepare('
+            SELECT privilege_level FROM users 
+            WHERE user_id = :id
+        ');
+
+        $query->bindParam(':id', $userId);
+        $query->execute();
+
+        return $query->fetch();
+    }
 }

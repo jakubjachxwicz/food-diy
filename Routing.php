@@ -110,6 +110,36 @@ class Routing
             'action' => 'searchRecipes',
             'method' => 'GET',
             'protected' => true
+        ],
+        'api/recipe' => [
+            'controller' => 'RecipeController',
+            'action' => 'getRecipe',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipe/is-favourite' => [
+            'controller' => 'RecipeController',
+            'action' => 'isRecipeFavourite',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipe/toggle-favourite' => [
+            'controller' => 'RecipeController',
+            'action' => 'toggleRecipeFavourite',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipe/current-user-rating' => [
+            'controller' => 'RecipeController',
+            'action' => 'getCurrentUserRating',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipe/rate-recipe' => [
+            'controller' => 'RecipeController',
+            'action' => 'rateRecipe',
+            'method' => 'GET',
+            'protected' => true
         ]
     ];
     
@@ -158,8 +188,9 @@ class Routing
                 $controller = AuthController::getInstance($repository);
                 break;
             case RecipeController::class:
-                $repository = new RecipeRepository($database);
-                $controller = RecipeController::getInstance($repository);
+                $recipeRepository = new RecipeRepository($database);
+                $userRepository = new UserRepository($database);
+                $controller = RecipeController::getInstance($recipeRepository, $userRepository);
                 break;
         }
 
