@@ -503,4 +503,45 @@ class RecipeController
             error_log($e->getMessage());
         }
     }
+
+    public function getAccountInfo()
+    {
+        try
+        {
+            $userId = getCurrentUserId();
+            if ($userId === null)
+            {
+                http_response_code(401);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'User not authorized'
+                ]);
+                return;
+            }
+
+            $user = $this->userRepository->getById($userId);
+            $addedRecipes = $this->recipeRepository->getRecipesForUser($userId);
+            $favouriteRecipes = $this->recipeRepository->getFavouriteRecipes($userId);
+            $favouriteRecipesFiltered = array_filter($favouriteRecipes, fn($fr) => $this->shouldIncludeRecipe($fr));
+
+            $result = [
+                'username' => $user['username'],
+                'added_recipes' => $addedRecipes,
+                'favourite' => $favouriteRecipesFiltered,
+            ];
+
+            echo json_encode([
+                'success' => true,
+                'data' => $result
+            ]);
+        } catch (Exception $e)
+        {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
 }

@@ -140,6 +140,12 @@ class Routing
             'action' => 'rateRecipe',
             'method' => 'GET',
             'protected' => true
+        ],
+        'api/account/info' => [
+            'controller' => 'RecipeController',
+            'action' => 'getAccountInfo',
+            'method' => 'GET',
+            'protected' => true
         ]
     ];
     

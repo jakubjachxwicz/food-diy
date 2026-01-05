@@ -239,4 +239,34 @@ class RecipeRepository extends Repository
         $query->bindParam(':rate', $rate);
         $query->execute();
     }
+
+    public function getRecipesForUser($userId)
+    {
+        $query = $this->database->connect()->prepare('
+            SELECT recipe_id, recipe_name
+            FROM recipes
+            WHERE author_id = :userId
+        ');
+
+        $query->bindParam(':userId', $userId);
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getFavouriteRecipes($userId)
+    {
+        $query = $this->database->connect()->prepare('
+            SELECT recipes.recipe_id, recipe_name, active, author_id
+            FROM recipes
+            JOIN favourite_recipes 
+            ON favourite_recipes.recipe_id = recipes.recipe_id
+            WHERE favourite_recipes.user_id = :userId
+        ');
+
+        $query->bindParam(':userId', $userId);
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

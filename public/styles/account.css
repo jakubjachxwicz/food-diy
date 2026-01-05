@@ -83,6 +83,7 @@ img {
 .recipe-title {
     font-weight: bold;
     font-size: 1.2rem;
+    cursor: pointer;
 }
 
 .recipe-options {
@@ -104,6 +105,12 @@ div > a {
     width: 100%;
     text-align: center;
     margin: 16px 0;
+}
+
+.error-div {
+    text-align: center;
+    font-size: 1.4rem;
+    margin: 40px 0;
 }
 
 .page-button {
