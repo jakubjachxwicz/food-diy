@@ -42,9 +42,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const result = await response.json();
         console.log(result);
         
-        if (!result.ok)
+        if (!response.ok)
         {
             renderErrorInfo();
+            return;
         }
 
         const data = result.data;
@@ -78,6 +79,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     } catch (error)
     {
+        console.log(error);
+        
         renderErrorInfo();
     }
 });

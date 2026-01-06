@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="public/styles/header.css">
     <link rel="stylesheet" type="text/css" href="public/styles/add-recipe.css">
     <script src="public/scripts/header.js" defer></script>
+    <script src="public/scripts/add-recipe.js" defer></script>
 </head>
 <body>
     <header>
@@ -44,19 +45,19 @@
     <form>
         <div class="form-elements">
             <div class="input-wrapper">
-                <input type="text" class="form-input" />
+                <input type="text" class="form-input" id="recipeNameInput" />
             </div>
 
             <div class="input-wrapper">
-                <textarea class="form-input description"></textarea>
+                <textarea class="form-input description" id="recipeDescriptionInput"></textarea>
             </div>
 
             <div class="input-wrapper">
-                <textarea class="form-input instructions"></textarea>
+                <textarea class="form-input instructions" id="recipeInstructionInput"></textarea>
             </div>
 
             <div class="input-wrapper">
-                <textarea class="form-input tips"></textarea>
+                <textarea class="form-input tips" id="recipeTipsInput"></textarea>
             </div>
         </div>
     </form>
@@ -66,7 +67,7 @@
     <h3>Składniki</h3>
 
     <div class="selected-ingredients">
-        <div>
+        <!-- <div>
             <span>sól 10 g</span>
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
         </div>
@@ -79,16 +80,16 @@
         <div>
             <span>cukier 2 łyżki</span>
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-        </div>
+        </div> -->
     </div>
 
 
     <div class="add-ingredient-section">
         <div class="ingredient-input input-wrapper">
-            <input type="text" class="form-input" />
+            <input type="text" class="form-input" id="newIngredientInput" />
         </div>
 
-        <div class="add-button input-wrapper">
+        <div class="add-button input-wrapper" id="addIngredientButton">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
         </div>
     </div>
