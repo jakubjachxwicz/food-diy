@@ -269,4 +269,17 @@ class RecipeRepository extends Repository
 
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function createRecipe($recipe)
+    {
+        $query = $this->database->connect()->prepare('
+            INSERT INTO recipes
+            (recipe_name, recipe_description, instruction, tips, portions, author_id, date_added, active, views, difficulty, category_id)
+        ');
+
+        $query->bindParam(':userId', $userId);
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

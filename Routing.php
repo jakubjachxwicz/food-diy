@@ -146,6 +146,12 @@ class Routing
             'action' => 'getAccountInfo',
             'method' => 'GET',
             'protected' => true
+        ],
+        'api/recipes/add' => [
+            'controller' => 'RecipeController',
+            'action' => 'addRecipe',
+            'method' => 'POST',
+            'protected' => true
         ]
     ];
     

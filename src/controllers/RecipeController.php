@@ -544,4 +544,37 @@ class RecipeController
             error_log($e->getMessage());
         }
     }
+
+    public function addRecipe()
+    {
+        try
+        {
+            $userId = getCurrentUserId();
+            if ($userId === null)
+            {
+                http_response_code(401);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'User not authorized'
+                ]);
+                return;
+            }
+
+            $input = json_decode(file_get_contents('php://input'), true);
+            
+
+            echo json_encode([
+                'success' => true,
+                'recipe_id' => 
+            ]);
+        } catch (Exception $e)
+        {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
 }
