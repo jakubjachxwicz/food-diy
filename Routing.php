@@ -2,12 +2,22 @@
 
 require_once 'src/controllers/AppController.php';
 require_once 'src/controllers/AuthController.php';
+require_once 'src/controllers/RecipeController.php';
+
 require_once 'src/repositories/UserRepository.php';
+require_once 'src/repositories/RecipeRepository.php';
+
 require_once 'Database.php';
 
 class Routing 
 {
     public static $routes = [
+        '' => [
+            'controller' => 'AppController',
+            'action' => 'default',
+            'method' => 'GET',
+            'protected' => true
+        ],
         'login' => [
             'controller' => 'AppController',
             'action' => 'login',
@@ -63,6 +73,79 @@ class Routing
             'controller' => 'AuthController',
             'action' => 'checkAuth',
             'method' => 'GET'
+        ],
+
+        'api/recipes/popular' => [
+            'controller' => 'RecipeController',
+            'action' => 'getPopularRecipesWithCategoryAndTags',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipes/categories' => [
+            'controller' => 'RecipeController',
+            'action' => 'getRecipesByCategory',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/categories' => [
+            'controller' => 'RecipeController',
+            'action' => 'getAvailableCategories',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipes/tags' => [
+            'controller' => 'RecipeController',
+            'action' => 'getRecipesByTag',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/tags' => [
+            'controller' => 'RecipeController',
+            'action' => 'getAvailableTags',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipes/search' => [
+            'controller' => 'RecipeController',
+            'action' => 'searchRecipes',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipe' => [
+            'controller' => 'RecipeController',
+            'action' => 'getRecipe',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipe/is-favourite' => [
+            'controller' => 'RecipeController',
+            'action' => 'isRecipeFavourite',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipe/toggle-favourite' => [
+            'controller' => 'RecipeController',
+            'action' => 'toggleRecipeFavourite',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipe/current-user-rating' => [
+            'controller' => 'RecipeController',
+            'action' => 'getCurrentUserRating',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipe/rate-recipe' => [
+            'controller' => 'RecipeController',
+            'action' => 'rateRecipe',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/account/info' => [
+            'controller' => 'RecipeController',
+            'action' => 'getAccountInfo',
+            'method' => 'GET',
+            'protected' => true
         ]
     ];
     
@@ -109,6 +192,11 @@ class Routing
             case AuthController::class:
                 $repository = new UserRepository($database);
                 $controller = AuthController::getInstance($repository);
+                break;
+            case RecipeController::class:
+                $recipeRepository = new RecipeRepository($database);
+                $userRepository = new UserRepository($database);
+                $controller = RecipeController::getInstance($recipeRepository, $userRepository);
                 break;
         }
 

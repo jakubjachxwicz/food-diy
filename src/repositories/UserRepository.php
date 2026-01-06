@@ -50,21 +50,27 @@ class UserRepository extends Repository
     
     public function getById(int $id): ?array
     {
-        foreach ($this->users as $user) {
-            if ($user['id'] === $id) {
-                return $user;
-            }
-        }
-        return null;
+        $query = $this->database->connect()->prepare('
+            SELECT * FROM users
+            WHERE user_id = :userId
+        ');
+
+        $query->bindParam(':userId', $id);
+        $query->execute();
+
+        return $query->fetch(PDO::FETCH_ASSOC);
     }
-    
-    public function updateLastLogin(int $userId): void
+
+    public function getUserRole(int $userId)
     {
-        foreach ($this->users as $key => $user) {
-            if ($user['id'] === $userId) {
-                $this->users[$key]['last_login'] = date('Y-m-d H:i:s');
-                break;
-            }
-        }       
+        $query = $this->database->connect()->prepare('
+            SELECT privilege_level FROM users 
+            WHERE user_id = :id
+        ');
+
+        $query->bindParam(':id', $userId);
+        $query->execute();
+
+        return $query->fetch();
     }
 }

@@ -145,7 +145,7 @@ class AuthController
                 'success' => true,
                 'message' => 'Login successful',
                 'user' => [
-                    'id' => $user['id'],
+                    'id' => $user['user_id'],
                     'email' => $user['email'],
                     'name' => $user['name'] ?? ''
                 ]

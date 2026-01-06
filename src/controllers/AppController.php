@@ -46,6 +46,11 @@ class AppController
         return $this->render('recipe-list');
     }
 
+    public function default()
+    {
+        header('Location: /recipes');
+    }
+
     public function recipe()
     {
         return $this->render('recipe');

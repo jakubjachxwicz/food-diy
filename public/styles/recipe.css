@@ -70,6 +70,10 @@
     cursor: pointer;
 }
 
+#recipeDescriptionField {
+    max-width: 500px;
+}
+
 .content-section {
     display: grid;
     grid-template-columns: 3fr 5fr;
@@ -120,6 +124,63 @@
 .ingredient-row > div {
     background-color: var(--dark-gray-border);
     height: 1px;
+}
+
+.error-output {
+    margin-top: 60px;
+    font-size: 1.5rem;
+}
+
+.disabled-button {
+    background-color: var(--gray-border) !important;
+    color: var(--dark-red) !important;
+    border-color: var(--error-red) !important;
+}
+
+.rating-popup {
+    position: absolute;
+    z-index: 100;
+    width: 300px;
+    height: 220px;
+    top: 36vh;
+    background-color: var(--on-surface);
+    border: 2px solid var(--dark-red);
+    border-radius: 30px;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.rating-popup button {
+    width: 60%;
+    padding: 12px 0;
+}
+
+.rating-popup div {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    justify-content: end;
+    width: 80%;
+}
+
+.rating-popup input {
+    width: 20%;
+    outline: none;
+    border: solid 2px var(--dark-bg-color);
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.rating-popup svg {
+    fill: var(--dark-bg-color);
+    cursor: pointer;
+}
+
+#popupErrorOutput {
+    color: var(--light-red);
+    display: inline;
+    text-align: center;
 }
 
 
