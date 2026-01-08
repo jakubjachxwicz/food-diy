@@ -561,14 +561,46 @@ class RecipeController
             }
 
             $input = json_decode(file_get_contents('php://input'), true);
+
+            $pdo = $this->recipeRepository->getConnection();
+            $pdo->beginTransaction();
+
+            $category = $this->recipeRepository->getCategoryId($input['category']);
+
+            $recipe = [
+                'name' => $input['recipe_name'],
+                'description' => $input['description'],
+                'instruction' => $input['instruction'],
+                'tips' => $input['tips'],
+                'portions' => $input['portions'],
+                'author_id' => $userId,
+                'difficulty' => $input['difficulty'],
+                'category_id' => $category['category_id']
+            ];
+            $recipe_data = $this->recipeRepository->createRecipe($recipe);
+            $recipe_id = $recipe_data['recipe_id'];
+
+            foreach ($input['ingredients'] as $ingredient) 
+            {
+                $this->recipeRepository->createIngredient($ingredient, $recipe_id);
+            }
+
+            foreach ($input['tags'] as $tag) 
+            {
+                $this->recipeRepository->createTag($tag, $recipe_id);
+            }
             
+            $pdo->commit();
 
             echo json_encode([
                 'success' => true,
-                'recipe_id' => 
+                'recipe_id' => $recipe_id
             ]);
         } catch (Exception $e)
         {
+            if (isset($pdo) && $pdo->inTransaction())
+                $pdo->rollBack();
+            
             http_response_code(500);
             echo json_encode([
                 'success' => false,

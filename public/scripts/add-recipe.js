@@ -286,6 +286,24 @@ createRecipeButton.addEventListener('click', async () => {
         ingredients: ingredients
     };
 
-    console.log(recipeData);
-    
+
+    try
+    {
+        const response = await fetch('api/recipes/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(recipeData)  
+        });
+
+        if (!response.ok)
+            renderError();
+
+        const data = await response.json();
+        location.replace(`/recipe?id=${data.recipe_id}`);
+    } catch (error)
+    {
+        console.error(error);
+    }
 });
