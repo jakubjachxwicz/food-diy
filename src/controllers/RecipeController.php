@@ -522,7 +522,8 @@ class RecipeController
             $user = $this->userRepository->getById($userId);
             $addedRecipes = $this->recipeRepository->getRecipesForUser($userId);
             $favouriteRecipes = $this->recipeRepository->getFavouriteRecipes($userId);
-            $favouriteRecipesFiltered = array_filter($favouriteRecipes, fn($fr) => $this->shouldIncludeRecipe($fr));
+            $favouriteRecipesFiltered = array_values(array_filter($favouriteRecipes, 
+                                            fn($fr) => $this->shouldIncludeRecipe($fr)));
 
             $result = [
                 'username' => $user['username'],
@@ -717,6 +718,63 @@ class RecipeController
             }
 
             $this->recipeRepository->deleteRecipe($recipeId);
+
+            echo json_encode([
+                'success' => true
+            ]);
+        } catch (Exception $e)
+        {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
+
+    public function toggleRecipeArchived()
+    {
+        try
+        {
+            if (!isset($_GET['id']) || $_GET['id'] === '' || !is_numeric($_GET['id']))
+            {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Invalid recipe id provided'
+                ]);
+                return;
+            }
+            
+            $recipeId = $_GET['id'];
+            $recipe = $this->recipeRepository->getRecipeById($recipeId);
+            if ($recipe === false)
+            {
+                http_response_code(404);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Recipe not found'
+                ]);
+                return;
+            }
+
+            $userId = getCurrentUserId();
+            $userRole = $this->userRepository->getUserRole($userId);
+            if ($userRole['privilege_level'] === 3)
+            {
+                http_response_code(403);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'You do not have sufficient privileges to perform this action'
+                ]);
+                return;
+            }
+
+            if ($recipe['active'])
+                $this->recipeRepository->setRecipeInactive($recipeId);
+            else
+                $this->recipeRepository->setRecipeActive($recipeId);
 
             echo json_encode([
                 'success' => true

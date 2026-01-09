@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         const result = await response.json();
-        console.log(result);
         
         if (!response.ok)
         {
@@ -66,6 +65,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const favourite = data.favourite;
+        console.log(favourite);
+        
         if (favourite.length === 0)
         {
             const noFavouriteRecipesDiv = document.createElement('div');
@@ -107,6 +108,10 @@ const deleteRecipe = async (recipe_id) => {
 
 
 const renderRecipeList = (recipes, container, renderButtons = true) => {
+    console.log(recipes);
+    
+    if (recipes.length === 0)
+        return;
     recipes.forEach((recipe, index) => {
         if (index > 0)
         {

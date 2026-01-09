@@ -12,6 +12,7 @@ const recipeInstructionField = document.querySelector('#recipeInstructionField')
 const recipeTipsLabel = document.querySelector('#recipeTipsLabel');
 const recipeTipsField = document.querySelector('#recipeTipsField');
 const addToFavouriteButton = document.querySelector('#addToFavouriteButton');
+const archiveRecipeButton = document.querySelector('#archiveRecipeButton');
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -37,6 +38,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const data = await response.json();
         const recipe = data.recipe;
 
+        if (!recipe.active)
+        {
+            const isArchivedDisplay = document.querySelector('#archived');
+            archiveRecipeButton.textContent = 'Przywróć';
+            isArchivedDisplay.style.display = 'block';
+        }
         recipeTitleField.textContent = recipe.recipe_name;
         recipeDescriptionField.textContent = recipe.recipe_description ?? '';
         recipeCategoryField.textContent = recipe.category ?? '';
@@ -76,7 +83,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
 
-        
+        await renderFavouriteButton();
+        await renderArchiveButton();
     } catch (error)
     {
         const pageContent = document.getElementsByClassName('page-content');
@@ -90,8 +98,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         contentDiv.textContent = 'Wystąpił nieznany błąd';            
     }
-
-    await renderFavouriteButton();
 
     addToFavouriteButton.addEventListener('click', addToFavouriteHandler);
 });
@@ -160,6 +166,49 @@ const renderFavouriteButton = async () => {
         contentDiv.classList = ['error-output'];
 
         contentDiv.textContent = 'Wystąpił nieznany błąd';
+    }
+};
+
+
+const renderArchiveButton = async () => {
+    const response = await fetch('api/user/privilege', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok)
+        throw 'Unexpected error';
+
+    const data = await response.json();
+    console.log(data);
+    
+    if (data.privilege < 3)
+    {
+        const params = new URLSearchParams(window.location.search);
+        const recipeId = params.get('id');
+        
+        archiveRecipeButton.style.display = 'block';
+
+        archiveRecipeButton.addEventListener('click', async () => {
+            const archiveResponse = await fetch(`api/recipe/archive?id=${recipeId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!archiveResponse.ok)
+                throw 'Unexpected error';
+
+            const archiveResult = await archiveResponse.json();
+            console.log(archiveResult);
+            if (archiveResult.success)
+                location.reload();
+ 
+            throw 'Wystąpił nieznany błąd';
+        });
     }
 };
 

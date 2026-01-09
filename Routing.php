@@ -164,6 +164,18 @@ class Routing
             'action' => 'deleteRecipe',
             'method' => 'DELETE',
             'protected' => true
+        ],
+        'api/user/privilege' => [
+            'controller' => 'AuthController',
+            'action' => 'getCurrentUserPrivileges',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipe/archive' => [
+            'controller' => 'RecipeController',
+            'action' => 'toggleRecipeArchived',
+            'method' => 'GET',
+            'protected' => true
         ]
     ];
     

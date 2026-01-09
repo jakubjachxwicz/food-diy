@@ -403,4 +403,28 @@ class RecipeRepository extends Repository
 
         $query->execute();
     }
+
+    public function setRecipeInactive($recipeId)
+    {
+        $query = $this->database->connect()->prepare('
+            UPDATE recipes
+            SET active = false
+            WHERE recipe_id = :recipe_id
+        ');
+
+        $query->bindParam(':recipe_id', $recipeId);
+        $query->execute();
+    }
+
+    public function setRecipeActive($recipeId)
+    {
+        $query = $this->database->connect()->prepare('
+            UPDATE recipes
+            SET active = true
+            WHERE recipe_id = :recipe_id
+        ');
+
+        $query->bindParam(':recipe_id', $recipeId);
+        $query->execute();
+    }
 }

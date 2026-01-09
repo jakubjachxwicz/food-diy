@@ -225,4 +225,30 @@ class AuthController
         
         return $errors;
     }
+
+    public function getCurrentUserPrivileges()
+    {
+        try
+        {
+            $userId = getCurrentUserId();
+            $userRole = $this->userRepository->getUserRole($userId);
+            $privilege = $userRole['privilege_level'];
+
+            echo json_encode([
+                'success' => true,
+                'privilege' => $privilege
+            ]);
+        } catch (Exception $e)
+        {
+            if (isset($pdo) && $pdo->inTransaction())
+                $pdo->rollBack();
+            
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
 }
