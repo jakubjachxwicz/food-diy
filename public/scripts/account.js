@@ -86,6 +86,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 
+const deleteRecipe = async (recipe_id) => {
+    try {
+        const response = await fetch(`api/recipes/delete?id=${recipe_id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok)
+        {
+            alert('Wystąpił nieznany błąd');
+        }
+
+        location.reload();
+    } catch (error) {
+        alert('Wystąpił nieznany błąd');
+    }
+};
+
+
 const renderRecipeList = (recipes, container, renderButtons = true) => {
     recipes.forEach((recipe, index) => {
         if (index > 0)
@@ -117,9 +137,14 @@ const renderRecipeList = (recipes, container, renderButtons = true) => {
         {
             const editLink = document.createElement("a");
             editLink.textContent = "Edytuj";
+            editLink.addEventListener('click', () => location.replace(`/add-recipe?edit-recipe-id=${recipe.recipe_id}`))
 
             const deleteLink = document.createElement("a");
             deleteLink.textContent = "Usuń";
+            deleteLink.addEventListener('click', async () => {
+                confirm('Czy na pewno chcesz trwale usunąć ten przepis?')
+                await deleteRecipe(recipe.recipe_id);
+            });
 
             options.appendChild(editLink);
             options.appendChild(document.createTextNode("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"));

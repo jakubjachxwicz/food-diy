@@ -339,8 +339,68 @@ class RecipeRepository extends Repository
         $query->execute();
     }
 
+    public function updateRecipe($recipe)
+    {
+        $query = $this->database->connect()->prepare('
+            UPDATE recipes
+            SET
+                recipe_name        = :name,
+                recipe_description = :description,
+                instruction        = :instruction,
+                tips               = :tips,
+                portions           = :portions,
+                difficulty         = :difficulty,
+                category_id        = :category_id
+            WHERE recipe_id = :recipe_id
+        ');
+
+        $query->bindParam(':name', $recipe['name']);
+        $query->bindParam(':description', $recipe['description']);
+        $query->bindParam(':instruction', $recipe['instruction']);
+        $query->bindParam(':tips', $recipe['tips']);
+        $query->bindParam(':portions', $recipe['portions']);
+        $query->bindParam(':difficulty', $recipe['difficulty']);
+        $query->bindParam(':category_id', $recipe['category_id']);
+        $query->bindParam(':recipe_id', $recipe['recipe_id']);
+        $query->execute();
+    }
+
+    public function deleteIngredients($recipe_id)
+    {
+        $query = $this->database->connect()->prepare('
+            DELETE FROM ingredients
+            WHERE recipe_id = :recipe_id
+        ');
+
+        $query->bindParam(':recipe_id', $recipe_id);
+        $query->execute();
+    }
+
+    public function deleteTags($recipe_id)
+    {
+        $query = $this->database->connect()->prepare('
+            DELETE FROM tags_recipes
+            WHERE recipe_id = :recipe_id
+        ');
+
+        $query->bindParam(':recipe_id', $recipe_id);
+        $query->execute();
+    }
+
     public function getConnection()
     {
         return $this->database->connect();
+    }
+
+    public function deleteRecipe($recipeId)
+    {
+        $query = $this->database->connect()->prepare('
+            DELETE FROM recipes
+            WHERE recipe_id = :recipe_id
+        ');
+
+        $query->bindParam(':recipe_id', $recipeId);
+
+        $query->execute();
     }
 }

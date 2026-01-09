@@ -1,3 +1,6 @@
+let editing = false;
+let globalRecipeId = 0;
+
 const recipeNameInput = document.querySelector('#recipeNameInput');
 const recipeDescriptionInput = document.querySelector('#recipeDescriptionInput');
 const recipeInstructionInput = document.querySelector('#recipeInstructionInput');
@@ -150,9 +153,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     success = await getAvailableTags();
     if (!success) return;
 
-    console.log(availableCategories);
-    console.log(availableTags);
-    
     availableCategories.forEach(category => {
         const item = document.createElement('div');
         item.dataset.value = category;
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.value = tag;
-        checkbox.id = `tag-${tag}`;
+        checkbox.id = `tag-${tag.replace(' ', '-')}`;
 
         const span = document.createElement('span');
         span.textContent = tag;
@@ -201,6 +201,57 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         tagsPopup.appendChild(item);
     });
+
+
+    const params = new URLSearchParams(window.location.search);
+    const recipeId = parseInt(params.get('edit-recipe-id'));
+
+    if (recipeId)
+    {
+        try {
+            const response = await fetch(`api/recipe?id=${recipeId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok)
+                renderError();
+
+            const data = await response.json();
+            console.log(data);
+
+            const recipe = data.recipe;
+
+            recipeNameInput.value = recipe.recipe_name;
+            recipeDescriptionInput.value = recipe.recipe_description ?? '';
+            recipeInstructionInput.value = recipe.instruction;
+            recipeTipsInput.value = recipe.tips ?? '';
+            recipePortionsInput.value = recipe.portions ?? '';
+            recipeDifficultyInput.value = recipe.difficulty;
+            selectedCategorySpan.dataset.value = recipe.category;
+            selectedCategorySpan.textContent = recipe.category;
+            recipe.tags.forEach(tag => {
+                selectedTags.push(tag);
+                const checkbox = document.querySelector(`#tag-${tag.replace(' ', '-')}`);
+                checkbox.checked = true;
+            });
+            recipe.ingredients.forEach(ingredient => selectedIngredients.push({ 
+                ingredient_id: generateUniqueId(selectedIngredients), 
+                ingredient_name: ingredient.ingredient_name 
+            }));
+            renderSelectedIngredients();
+
+            editing = true;
+            globalRecipeId = recipeId;
+            createRecipeButton.textContent = 'Edytuj przepis';
+            
+        } catch (error) {
+            console.error(error);
+            renderError();
+        }
+    }
 });
 
 
@@ -286,11 +337,13 @@ createRecipeButton.addEventListener('click', async () => {
         ingredients: ingredients
     };
 
+    if (editing)
+        recipeData.recipe_id = globalRecipeId;
 
     try
     {
-        const response = await fetch('api/recipes/add', {
-            method: 'POST',
+        const response = await fetch(editing ? 'api/recipes/edit' : 'api/recipes/add', {
+            method: editing ? 'PUT' : 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },

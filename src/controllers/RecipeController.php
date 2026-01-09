@@ -609,4 +609,126 @@ class RecipeController
             error_log($e->getMessage());
         }
     }
+
+    public function editRecipe()
+    {
+        try
+        {
+            $userId = getCurrentUserId();
+            if ($userId === null)
+            {
+                http_response_code(401);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'User not authorized'
+                ]);
+                return;
+            }
+
+            $input = json_decode(file_get_contents('php://input'), true);
+
+            $pdo = $this->recipeRepository->getConnection();
+            $pdo->beginTransaction();
+
+            $category = $this->recipeRepository->getCategoryId($input['category']);
+
+            $recipe_id = $input['recipe_id'];
+
+            $recipe = [
+                'recipe_id' => $recipe_id,
+                'name' => $input['recipe_name'],
+                'description' => $input['description'],
+                'instruction' => $input['instruction'],
+                'tips' => $input['tips'],
+                'portions' => $input['portions'],
+                'difficulty' => $input['difficulty'],
+                'category_id' => $category['category_id']
+            ];
+            $this->recipeRepository->updateRecipe($recipe);
+
+            $this->recipeRepository->deleteIngredients($recipe_id);
+            foreach ($input['ingredients'] as $ingredient) 
+            {
+                $this->recipeRepository->createIngredient($ingredient, $recipe_id);
+            }
+
+            $this->recipeRepository->deleteTags($recipe_id);
+            foreach ($input['tags'] as $tag) 
+            {
+                $this->recipeRepository->createTag($tag, $recipe_id);
+            }
+            
+            $pdo->commit();
+
+            echo json_encode([
+                'success' => true,
+                'recipe_id' => $recipe_id
+            ]);
+        } catch (Exception $e)
+        {
+            if (isset($pdo) && $pdo->inTransaction())
+                $pdo->rollBack();
+            
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
+
+    public function deleteRecipe()
+    {
+        try
+        {
+            if (!isset($_GET['id']) || $_GET['id'] === '' || !is_numeric($_GET['id']))
+            {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Invalid recipe id provided'
+                ]);
+                return;
+            }
+            
+            $userId = getCurrentUserId();
+            $recipeId = $_GET['id'];
+
+            $recipe = $this->recipeRepository->getRecipeById($recipeId);
+            if ($recipe === false)
+            {
+                http_response_code(404);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Recipe not found'
+                ]);
+                return;
+            }
+
+            if ($recipe['author_id'] != $userId)
+            {
+                http_response_code(401);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Unauthorized to perform this action'
+                ]);
+                return;
+            }
+
+            $this->recipeRepository->deleteRecipe($recipeId);
+
+            echo json_encode([
+                'success' => true
+            ]);
+        } catch (Exception $e)
+        {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
 }

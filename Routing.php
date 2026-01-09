@@ -152,6 +152,18 @@ class Routing
             'action' => 'addRecipe',
             'method' => 'POST',
             'protected' => true
+        ],
+        'api/recipes/edit' => [
+            'controller' => 'RecipeController',
+            'action' => 'editRecipe',
+            'method' => 'PUT',
+            'protected' => true
+        ],
+        'api/recipes/delete' => [
+            'controller' => 'RecipeController',
+            'action' => 'deleteRecipe',
+            'method' => 'DELETE',
+            'protected' => true
         ]
     ];
     
