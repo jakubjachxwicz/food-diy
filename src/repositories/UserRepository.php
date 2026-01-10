@@ -73,4 +73,30 @@ class UserRepository extends Repository
 
         return $query->fetch();
     }
+
+    public function getAllUsers()
+    {
+        $query = $this->database->connect()->prepare('
+            SELECT user_id, email, privilege_level 
+            FROM users 
+            WHERE privilege_level != 1
+        ');
+
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateRoleForUser($userId, $role)
+    {
+        $query = $this->database->connect()->prepare('
+            UPDATE users
+            SET privilege_level = :role
+            WHERE user_id = :user_id
+        ');
+
+        $query->bindParam(':user_id', $userId);
+        $query->bindParam(':role', $role);
+        $query->execute();
+    }
 }

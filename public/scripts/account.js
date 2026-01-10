@@ -29,6 +29,28 @@ logoutButton?.addEventListener('click', async () => {
 });
 
 
+const renderManageUsersButton = async () => {
+    const response = await fetch('api/user/privilege', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok)
+        throw 'Unexpected error';
+
+    const data = await response.json();
+    if (data.privilege === 1)
+    {
+        const manageUsersButton = document.querySelector('#manageUsersButton');
+        manageUsersButton.style.display = 'block';
+
+        manageUsersButton.addEventListener('click', () => location.replace('/manage-users'));
+    }
+};
+
+
 document.addEventListener('DOMContentLoaded', async () => {
     try 
     {
@@ -78,6 +100,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         {
             renderRecipeList(favourite, favouriteRecipesList, false);
         }
+
+        await renderManageUsersButton();
     } catch (error)
     {
         console.log(error);

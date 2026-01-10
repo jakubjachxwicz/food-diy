@@ -251,4 +251,82 @@ class AuthController
             error_log($e->getMessage());
         }
     }
+
+    public function getAllUsers()
+    {
+        try
+        {
+            $userId = getCurrentUserId();
+            $userRole = $this->userRepository->getUserRole($userId);
+            $privilege = $userRole['privilege_level'];
+
+            if ($privilege !== 1)
+            {
+                http_response_code(401);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Unauthorized to perform this action'
+                ]);
+                return;
+            }
+
+            $users = $this->userRepository->getAllUsers();
+
+            echo json_encode([
+                'success' => true,
+                'users' => $users
+            ]);
+        } catch (Exception $e)
+        {
+            if (isset($pdo) && $pdo->inTransaction())
+                $pdo->rollBack();
+            
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+        }
+    }
+
+    public function updateUserRole()
+    {
+        if (!isset($_GET['user_id']) || $_GET['user_id'] === '' || !is_numeric($_GET['user_id']))
+        {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Invalid user id provided'
+            ]);
+            return;
+        }
+
+        if (!isset($_GET['role']) || $_GET['role'] === '' || !is_numeric($_GET['role']))
+        {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Invalid role provided'
+            ]);
+            return;
+        }
+
+        $role = (int)$_GET['role'];
+        if ($role !== 2 && $role !== 3) 
+        {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Invalid role provided'
+            ]);
+            return;
+        }
+
+        $this->userRepository->updateRoleForUser($_GET['user_id'], $role);
+
+        http_response_code(200);
+        echo json_encode([
+            'success' => true
+        ]);
+    }
 }
