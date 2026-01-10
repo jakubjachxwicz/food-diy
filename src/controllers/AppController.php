@@ -65,6 +65,11 @@ class AppController
     {
         return $this->render('account');
     }
+
+    public function manageUsers()
+    {
+        return $this->render('manage-users');
+    }
     
     
     private function render(string $template = null, array $variables = [])

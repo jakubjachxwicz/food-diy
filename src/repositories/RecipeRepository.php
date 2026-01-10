@@ -269,4 +269,162 @@ class RecipeRepository extends Repository
 
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getCategoryId($categoryName)
+    {
+        $query = $this->database->connect()->prepare('
+            SELECT category_id FROM categories
+            WHERE category_name = :category
+        ');
+
+        $query->bindParam(':category', $categoryName);
+        $query->execute();
+
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function createRecipe($recipe)
+    {
+        $query = $this->database->connect()->prepare('
+            INSERT INTO recipes
+            (recipe_name, recipe_description, instruction, tips, 
+                portions, author_id, active, views, difficulty, category_id)
+            VALUES
+            (:name, :description, :instruction, :tips, :portions,
+                :author_id, true, 0, :difficulty, :category_id)
+            RETURNING recipe_id
+        ');
+
+        $query->bindParam(':name', $recipe['name']);
+        $query->bindParam(':description', $recipe['description']);
+        $query->bindParam(':instruction', $recipe['instruction']);
+        $query->bindParam(':tips', $recipe['tips']);
+        $query->bindParam(':portions', $recipe['portions']);
+        $query->bindParam(':author_id', $recipe['author_id']);
+        $query->bindParam(':difficulty', $recipe['difficulty']);
+        $query->bindParam(':category_id', $recipe['category_id']);
+        $query->execute();
+
+        return $query->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function createIngredient($ingredient, $recipe_id)
+    {
+        $query = $this->database->connect()->prepare('
+            INSERT INTO ingredients
+            (recipe_id, ingredient_name)
+            VALUES
+            (:recipe_id, :ingredient_name)
+        ');
+
+        $query->bindParam(':recipe_id', $recipe_id);
+        $query->bindParam(':ingredient_name', $ingredient);
+        $query->execute();
+    }
+
+    public function createTag($tag, $recipe_id)
+    {
+        $query = $this->database->connect()->prepare('
+            INSERT INTO tags_recipes
+            (recipe_id, tag_id)
+            VALUES
+            (:recipe_id, (
+                SELECT tag_id FROM tags
+                WHERE tag_name = :tag_name    
+            ))
+        ');
+
+        $query->bindParam(':recipe_id', $recipe_id);
+        $query->bindParam(':tag_name', $tag);
+        $query->execute();
+    }
+
+    public function updateRecipe($recipe)
+    {
+        $query = $this->database->connect()->prepare('
+            UPDATE recipes
+            SET
+                recipe_name        = :name,
+                recipe_description = :description,
+                instruction        = :instruction,
+                tips               = :tips,
+                portions           = :portions,
+                difficulty         = :difficulty,
+                category_id        = :category_id
+            WHERE recipe_id = :recipe_id
+        ');
+
+        $query->bindParam(':name', $recipe['name']);
+        $query->bindParam(':description', $recipe['description']);
+        $query->bindParam(':instruction', $recipe['instruction']);
+        $query->bindParam(':tips', $recipe['tips']);
+        $query->bindParam(':portions', $recipe['portions']);
+        $query->bindParam(':difficulty', $recipe['difficulty']);
+        $query->bindParam(':category_id', $recipe['category_id']);
+        $query->bindParam(':recipe_id', $recipe['recipe_id']);
+        $query->execute();
+    }
+
+    public function deleteIngredients($recipe_id)
+    {
+        $query = $this->database->connect()->prepare('
+            DELETE FROM ingredients
+            WHERE recipe_id = :recipe_id
+        ');
+
+        $query->bindParam(':recipe_id', $recipe_id);
+        $query->execute();
+    }
+
+    public function deleteTags($recipe_id)
+    {
+        $query = $this->database->connect()->prepare('
+            DELETE FROM tags_recipes
+            WHERE recipe_id = :recipe_id
+        ');
+
+        $query->bindParam(':recipe_id', $recipe_id);
+        $query->execute();
+    }
+
+    public function getConnection()
+    {
+        return $this->database->connect();
+    }
+
+    public function deleteRecipe($recipeId)
+    {
+        $query = $this->database->connect()->prepare('
+            DELETE FROM recipes
+            WHERE recipe_id = :recipe_id
+        ');
+
+        $query->bindParam(':recipe_id', $recipeId);
+
+        $query->execute();
+    }
+
+    public function setRecipeInactive($recipeId)
+    {
+        $query = $this->database->connect()->prepare('
+            UPDATE recipes
+            SET active = false
+            WHERE recipe_id = :recipe_id
+        ');
+
+        $query->bindParam(':recipe_id', $recipeId);
+        $query->execute();
+    }
+
+    public function setRecipeActive($recipeId)
+    {
+        $query = $this->database->connect()->prepare('
+            UPDATE recipes
+            SET active = true
+            WHERE recipe_id = :recipe_id
+        ');
+
+        $query->bindParam(':recipe_id', $recipeId);
+        $query->execute();
+    }
 }

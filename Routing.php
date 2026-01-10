@@ -52,6 +52,12 @@ class Routing
             'method' => 'GET',
             'protected' => true
         ],
+        'manage-users' => [
+            'controller' => 'AppController',
+            'action' => 'manageUsers',
+            'method' => 'GET',
+            'protected' => true
+        ],
 
         // API routes
         'api/auth/register' => [
@@ -135,6 +141,12 @@ class Routing
             'method' => 'GET',
             'protected' => true
         ],
+        'api/users/update-role' => [
+            'controller' => 'AuthController',
+            'action' => 'updateUserRole',
+            'method' => 'GET',
+            'protected' => true
+        ],
         'api/recipe/rate-recipe' => [
             'controller' => 'RecipeController',
             'action' => 'rateRecipe',
@@ -144,6 +156,42 @@ class Routing
         'api/account/info' => [
             'controller' => 'RecipeController',
             'action' => 'getAccountInfo',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipes/add' => [
+            'controller' => 'RecipeController',
+            'action' => 'addRecipe',
+            'method' => 'POST',
+            'protected' => true
+        ],
+        'api/recipes/edit' => [
+            'controller' => 'RecipeController',
+            'action' => 'editRecipe',
+            'method' => 'PUT',
+            'protected' => true
+        ],
+        'api/recipes/delete' => [
+            'controller' => 'RecipeController',
+            'action' => 'deleteRecipe',
+            'method' => 'DELETE',
+            'protected' => true
+        ],
+        'api/user/privilege' => [
+            'controller' => 'AuthController',
+            'action' => 'getCurrentUserPrivileges',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/recipe/archive' => [
+            'controller' => 'RecipeController',
+            'action' => 'toggleRecipeArchived',
+            'method' => 'GET',
+            'protected' => true
+        ],
+        'api/users' => [
+            'controller' => 'AuthController',
+            'action' => 'getAllUsers',
             'method' => 'GET',
             'protected' => true
         ]

@@ -67,20 +67,28 @@ textarea.tips {
     border: none;
 }
 
-.input-wrapper:nth-child(1)::before {
+.top-form-input:nth-child(1)::before {
   content: "Nazwa przepisu";
 }
 
-.input-wrapper:nth-child(2)::before {
+.top-form-input:nth-child(2)::before {
   content: "Opis";
 }
 
-.input-wrapper:nth-child(3)::before {
+.top-form-input:nth-child(3)::before {
   content: "Przygotowanie";
 }
 
-.input-wrapper:nth-child(4)::before {
+.top-form-input:nth-child(4)::before {
   content: "Wskazówki";
+}
+
+.bottom-form-input:nth-child(1)::before {
+  content: "Porcje";
+}
+
+.bottom-form-input:nth-child(2)::before {
+  content: "Poziom trudności (1-10)";
 }
 
 .selected-ingredients {
@@ -147,6 +155,49 @@ textarea.tips {
     content: "" !important;
 }
 
+.warning-output {
+    color: var(--light-red);
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    display: none;
+}
+
+.selection-popup {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: var(--light-bg-color);
+    border: solid 2px var(--dark-red);
+    border-radius: 8px;
+    display: none;
+    flex-direction: column;
+    z-index: 10;
+    padding: 8px 0;
+}
+
+.selection-popup div {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.selection-popup div:hover {
+    background-color: var(--gray-border);
+}
+
+#categoriesPopup {
+    top: 60px;
+}
+
+#tagsPopup {
+    bottom: 60px;
+}
+
+#tagsPopup div {
+    cursor: default;
+}
+
 @media only screen and (max-width: 720px) {
     form {
         width: 90%;
@@ -172,6 +223,7 @@ textarea.tips {
     padding: 10px;
     cursor: pointer;
     margin: 12px;
+    position: relative;
 }
 
 .categories-and-tags svg {

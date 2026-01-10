@@ -522,7 +522,8 @@ class RecipeController
             $user = $this->userRepository->getById($userId);
             $addedRecipes = $this->recipeRepository->getRecipesForUser($userId);
             $favouriteRecipes = $this->recipeRepository->getFavouriteRecipes($userId);
-            $favouriteRecipesFiltered = array_filter($favouriteRecipes, fn($fr) => $this->shouldIncludeRecipe($fr));
+            $favouriteRecipesFiltered = array_values(array_filter($favouriteRecipes, 
+                                            fn($fr) => $this->shouldIncludeRecipe($fr)));
 
             $result = [
                 'username' => $user['username'],
@@ -533,6 +534,250 @@ class RecipeController
             echo json_encode([
                 'success' => true,
                 'data' => $result
+            ]);
+        } catch (Exception $e)
+        {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
+
+    public function addRecipe()
+    {
+        try
+        {
+            $userId = getCurrentUserId();
+            if ($userId === null)
+            {
+                http_response_code(401);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'User not authorized'
+                ]);
+                return;
+            }
+
+            $input = json_decode(file_get_contents('php://input'), true);
+
+            $pdo = $this->recipeRepository->getConnection();
+            $pdo->beginTransaction();
+
+            $category = $this->recipeRepository->getCategoryId($input['category']);
+
+            $recipe = [
+                'name' => $input['recipe_name'],
+                'description' => $input['description'],
+                'instruction' => $input['instruction'],
+                'tips' => $input['tips'],
+                'portions' => $input['portions'],
+                'author_id' => $userId,
+                'difficulty' => $input['difficulty'],
+                'category_id' => $category['category_id']
+            ];
+            $recipe_data = $this->recipeRepository->createRecipe($recipe);
+            $recipe_id = $recipe_data['recipe_id'];
+
+            foreach ($input['ingredients'] as $ingredient) 
+            {
+                $this->recipeRepository->createIngredient($ingredient, $recipe_id);
+            }
+
+            foreach ($input['tags'] as $tag) 
+            {
+                $this->recipeRepository->createTag($tag, $recipe_id);
+            }
+            
+            $pdo->commit();
+
+            echo json_encode([
+                'success' => true,
+                'recipe_id' => $recipe_id
+            ]);
+        } catch (Exception $e)
+        {
+            if (isset($pdo) && $pdo->inTransaction())
+                $pdo->rollBack();
+            
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
+
+    public function editRecipe()
+    {
+        try
+        {
+            $userId = getCurrentUserId();
+            if ($userId === null)
+            {
+                http_response_code(401);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'User not authorized'
+                ]);
+                return;
+            }
+
+            $input = json_decode(file_get_contents('php://input'), true);
+
+            $pdo = $this->recipeRepository->getConnection();
+            $pdo->beginTransaction();
+
+            $category = $this->recipeRepository->getCategoryId($input['category']);
+
+            $recipe_id = $input['recipe_id'];
+
+            $recipe = [
+                'recipe_id' => $recipe_id,
+                'name' => $input['recipe_name'],
+                'description' => $input['description'],
+                'instruction' => $input['instruction'],
+                'tips' => $input['tips'],
+                'portions' => $input['portions'],
+                'difficulty' => $input['difficulty'],
+                'category_id' => $category['category_id']
+            ];
+            $this->recipeRepository->updateRecipe($recipe);
+
+            $this->recipeRepository->deleteIngredients($recipe_id);
+            foreach ($input['ingredients'] as $ingredient) 
+            {
+                $this->recipeRepository->createIngredient($ingredient, $recipe_id);
+            }
+
+            $this->recipeRepository->deleteTags($recipe_id);
+            foreach ($input['tags'] as $tag) 
+            {
+                $this->recipeRepository->createTag($tag, $recipe_id);
+            }
+            
+            $pdo->commit();
+
+            echo json_encode([
+                'success' => true,
+                'recipe_id' => $recipe_id
+            ]);
+        } catch (Exception $e)
+        {
+            if (isset($pdo) && $pdo->inTransaction())
+                $pdo->rollBack();
+            
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
+
+    public function deleteRecipe()
+    {
+        try
+        {
+            if (!isset($_GET['id']) || $_GET['id'] === '' || !is_numeric($_GET['id']))
+            {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Invalid recipe id provided'
+                ]);
+                return;
+            }
+            
+            $userId = getCurrentUserId();
+            $recipeId = $_GET['id'];
+
+            $recipe = $this->recipeRepository->getRecipeById($recipeId);
+            if ($recipe === false)
+            {
+                http_response_code(404);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Recipe not found'
+                ]);
+                return;
+            }
+
+            if ($recipe['author_id'] != $userId)
+            {
+                http_response_code(401);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Unauthorized to perform this action'
+                ]);
+                return;
+            }
+
+            $this->recipeRepository->deleteRecipe($recipeId);
+
+            echo json_encode([
+                'success' => true
+            ]);
+        } catch (Exception $e)
+        {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Unexpected error occurred'
+            ]);
+            error_log($e->getMessage());
+        }
+    }
+
+    public function toggleRecipeArchived()
+    {
+        try
+        {
+            if (!isset($_GET['id']) || $_GET['id'] === '' || !is_numeric($_GET['id']))
+            {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Invalid recipe id provided'
+                ]);
+                return;
+            }
+            
+            $recipeId = $_GET['id'];
+            $recipe = $this->recipeRepository->getRecipeById($recipeId);
+            if ($recipe === false)
+            {
+                http_response_code(404);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Recipe not found'
+                ]);
+                return;
+            }
+
+            $userId = getCurrentUserId();
+            $userRole = $this->userRepository->getUserRole($userId);
+            if ($userRole['privilege_level'] === 3)
+            {
+                http_response_code(403);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'You do not have sufficient privileges to perform this action'
+                ]);
+                return;
+            }
+
+            if ($recipe['active'])
+                $this->recipeRepository->setRecipeInactive($recipeId);
+            else
+                $this->recipeRepository->setRecipeActive($recipeId);
+
+            echo json_encode([
+                'success' => true
             ]);
         } catch (Exception $e)
         {

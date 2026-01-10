@@ -136,6 +136,16 @@ div > a {
     justify-content: space-between;
 }
 
+.manage-users-buttons {
+    background-color: var(--dark-red);
+    margin: 10px 0 40px 0;
+    padding: 10px 30px;
+    color: var(--on-surface);
+    border-radius: 10px;
+    cursor: pointer;
+    display: none;
+}
+
 
 @media only screen and (max-width: 1000px) {
     .recipes-container {

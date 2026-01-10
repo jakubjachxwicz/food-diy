@@ -183,6 +183,22 @@
     text-align: center;
 }
 
+.archive-recipe-button {
+    background-color: var(--dark-red);
+    margin: 10px 0 40px 0;
+    padding: 10px 30px;
+    color: var(--on-surface);
+    border-radius: 10px;
+    cursor: pointer;
+    display: none;
+}
+
+#archived {
+    color: var(--light-red);
+    text-align: center;
+    display: none;
+}
+
 
 @media only screen and (max-width: 800px) {
     .main-recipe-card {

@@ -29,6 +29,28 @@ logoutButton?.addEventListener('click', async () => {
 });
 
 
+const renderManageUsersButton = async () => {
+    const response = await fetch('api/user/privilege', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok)
+        throw 'Unexpected error';
+
+    const data = await response.json();
+    if (data.privilege === 1)
+    {
+        const manageUsersButton = document.querySelector('#manageUsersButton');
+        manageUsersButton.style.display = 'block';
+
+        manageUsersButton.addEventListener('click', () => location.replace('/manage-users'));
+    }
+};
+
+
 document.addEventListener('DOMContentLoaded', async () => {
     try 
     {
@@ -40,7 +62,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         const result = await response.json();
-        console.log(result);
         
         if (!response.ok)
         {
@@ -66,6 +87,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const favourite = data.favourite;
+        console.log(favourite);
+        
         if (favourite.length === 0)
         {
             const noFavouriteRecipesDiv = document.createElement('div');
@@ -77,6 +100,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         {
             renderRecipeList(favourite, favouriteRecipesList, false);
         }
+
+        await renderManageUsersButton();
     } catch (error)
     {
         console.log(error);
@@ -86,7 +111,31 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 
+const deleteRecipe = async (recipe_id) => {
+    try {
+        const response = await fetch(`api/recipes/delete?id=${recipe_id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok)
+        {
+            alert('Wystąpił nieznany błąd');
+        }
+
+        location.reload();
+    } catch (error) {
+        alert('Wystąpił nieznany błąd');
+    }
+};
+
+
 const renderRecipeList = (recipes, container, renderButtons = true) => {
+    console.log(recipes);
+    
+    if (recipes.length === 0)
+        return;
     recipes.forEach((recipe, index) => {
         if (index > 0)
         {
@@ -117,9 +166,14 @@ const renderRecipeList = (recipes, container, renderButtons = true) => {
         {
             const editLink = document.createElement("a");
             editLink.textContent = "Edytuj";
+            editLink.addEventListener('click', () => location.replace(`/add-recipe?edit-recipe-id=${recipe.recipe_id}`))
 
             const deleteLink = document.createElement("a");
             deleteLink.textContent = "Usuń";
+            deleteLink.addEventListener('click', async () => {
+                confirm('Czy na pewno chcesz trwale usunąć ten przepis?')
+                await deleteRecipe(recipe.recipe_id);
+            });
 
             options.appendChild(editLink);
             options.appendChild(document.createTextNode("\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"));
