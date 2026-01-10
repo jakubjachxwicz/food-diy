@@ -25,18 +25,29 @@ loginForm?.addEventListener('submit', async (e) => {
             body: JSON.stringify({ email, password })  
         });
 
-        const data = await response.json();
-        if (data.success) {
-            window.location.href = '/recipes';
-        } else {
-            // TODO display failure info on the page
-            // and check response as well
+        if (!response.ok)
+        {
+            switch (response.status)
+            {
+                case 400:
+                    errorOutput.textContent = "Email oraz hasło są wymagane";
+                    break;
+                case 401:
+                    errorOutput.textContent = "Niepoprawny email lub hasło";
+                    break;
+                default:
+                    throw '';
+            }
             
-            alert('Login failed: ' + data.message);
+            return;
         }
+        const data = await response.json();
+        if (data.success)
+            window.location.href = '/recipes';
+        throw '';
     } catch (error) {
         console.error('Error during login:', error);
-        alert('An error occurred during login. Please try again later.');
+        errorOutput.textContent = "Wystąpił nienznay błąd podczas logowania";
     }
 });
 
@@ -89,12 +100,29 @@ registerForm?.addEventListener('submit', async (e) => {
             body: JSON.stringify({ firstName, lastName, username, email, password })  
         });
 
+        if (!response.ok)
+        {
+            switch (response.status)
+            {
+                case 400:
+                    errorOutput.textContent = "Niepoprawne dane w formularzu";
+                    break;
+                case 409:
+                    errorOutput.textContent = "Email jest już zajęty";
+                    break;
+                default:
+                    throw '';
+            }
+            
+            return;
+        }
+
         data = await response.json();
         if (data.success)
         {
             window.location.href = '/recipes';
         } else {
-            errorOutput.textContent = "Nie udało się zarejestrować użytkownika, spróbuj ponownie.";
+            throw '';
         }
     } catch (error) {
         errorOutput.textContent = "Nie udało się zarejestrować użytkownika, spróbuj ponownie.";
